@@ -9,10 +9,10 @@ column should contain the stock ticker symbols for each stock you own. The share
 column should contain the number of shares that you own. An example is shown below:
 
 ```ticker,shares
-aapl,10
-amd,10
-amzn,10
-gbtc,10
+aapl,20
+amd,20
+amzn,2
+gbtc,40
 ```
 
 If this file is called 'example.csv', then you can create a tree map as follows:

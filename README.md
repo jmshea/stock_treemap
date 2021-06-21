@@ -1,5 +1,7 @@
-# stock_treemap
-Generate tree maps for stock portfolios using Python, Yahoo Finance, and Plotly. This code
+# stock_treemap 
+Want to make a cool stock diagram, like those on finviz: https://finviz.com/map.ashx ? 
+
+This library generates tree maps for stock portfolios using Python, Yahoo Finance, and Plotly. This code
 is meant to be run within a Jupyter environment. More details of requirements are further below.
 
 You will need to create a CSV file that has 2 columns: ticker and stocks. The ticker
@@ -30,6 +32,5 @@ Requires
 * numpy
 * pandas
 * plotly
-
-* Plotly requires plug-ins to work properly in Jupyter environments.
+  * Note that Plotly requires plug-ins to work properly in Jupyter environments.
 See https://plotly.com/python/getting-started/

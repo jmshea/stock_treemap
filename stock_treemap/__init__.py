@@ -6,7 +6,7 @@ stock tickers to sectors (strings).
 
 Also provided separate function to replot if sectors are updated (without having to wait
 for data to be pulled from Yahoo Finance, which can be quite slow). '''
-__version__ = '1.1.2'
+__version__ = '1.2'
 
 import yfinance as yf
 from tqdm import tqdm
@@ -65,13 +65,20 @@ def stock_treemap( csv_file, sectors={} ):
                     df.loc[ticker, 'sector']='Misc'
                 pbar.update()
         df['market value']=df['price']*df['shares']
-                
+
         df['change (day)'] = (df['price']-df['previous close'])*df['shares']
 
         df['percent change (day)'] =             np.round((df['price']-df['previous close'])/df['previous close']*100,2)
-    
-        my_title='Stocks value: &#36;' + str(int(np.round(df['market value'].sum()/1000)))+'k' + ", Today's change: &#36;"                 + str(int(np.round(df['change (day)'].sum())))
-        
+
+        total_value=df['market value'].sum()
+        if total_value<100_000:
+                my_title='Stocks value: &#36;' + str(int(np.round(total_value)))+ ", Today's change: &#36;" \
+                        + str(int(np.round(df['change (day)'].sum())))
+        else:
+                my_title='Stocks value: &#36;' + str(int(np.round(total_value/1000)))+'k' + ", Today's change: &#36;" \
+                        + str(int(np.round(df['change (day)'].sum())))
+
+
         fig = px.treemap(df, 
                          path=['sector',df.index], 
                          values='market value',
@@ -82,8 +89,8 @@ def stock_treemap( csv_file, sectors={} ):
                          hover_data={'percent change (day)':':.2f'}
 
                         )
-        fig.show()        
-        
+        fig.show()
+
 
         return df
 
@@ -114,7 +121,14 @@ def update_sectors(df, sectors):
         if ticker in sectors:
             df.loc[ticker, 'sector']=sectors[ticker]
 
-    my_title='Stocks value: &#36;' + str(int(np.round(df['market value'].sum()/1000)))+'k' + ", Today's change: &#36;"                 + str(int(np.round(df['change (day)'].sum())))
+    total_value=df['market value'].sum()
+    if total_value<100_000:
+        my_title='Stocks value: &#36;' + str(int(np.round(total_value)))+ ", Today's change: &#36;" \
+                + str(int(np.round(df['change (day)'].sum())))
+    else:
+        my_title='Stocks value: &#36;' + str(int(np.round(total_value/1000)))+'k' + ", Today's change: &#36;" \
+                + str(int(np.round(df['change (day)'].sum())))
+
     fig = px.treemap(df, 
                      path=['sector',df.index], 
                      values='market value',

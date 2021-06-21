@@ -1,0 +1,12 @@
+[build-system]
+requires = ["flit_core >=2,<4", "yfinance", "tqdm", "numpy", "pandas", "plotly" ]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "stock_treemap"
+author = "John M. Shea"
+author-email = "jshea@ieee.org"
+home-page = "https://github.com/jmshea/"
+classifiers = [ "License :: OSI Approved :: MIT License",]
+description-file = "README.md"
+

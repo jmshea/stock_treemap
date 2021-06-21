@@ -95,7 +95,7 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0, interactive=True, html_
                          path=['sector',df.index], 
                          values='market value',
                          color='percent change (day)',
-                        color_continuous_scale='RdBu',
+                        color_continuous_scale='RdYlGn',
                          color_continuous_midpoint=0,
                          title=my_title,
                          hover_data={'percent change (day)':':.2f'}
@@ -162,7 +162,7 @@ def update_sectors(df, sectors, cash_balance=0, interactive=True, html_file='' )
                      path=['sector',df.index], 
                      values='market value',
                      color='percent change (day)',
-                    color_continuous_scale='RdBu',
+                    color_continuous_scale='RdYlGn',
                      color_continuous_midpoint=0,
                      title=my_title,
                      hover_data={'percent change (day)':':.2f'}

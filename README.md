@@ -8,7 +8,8 @@ You will need to create a CSV file that has 2 columns: ticker and stocks. The ti
 column should contain the stock ticker symbols for each stock you own. The shares
 column should contain the number of shares that you own. An example is shown below:
 
-```ticker,shares
+```
+ticker,shares
 aapl,20
 amd,20
 amzn,2
@@ -17,7 +18,8 @@ gbtc,40
 
 If this file is called 'example.csv', then you can create a tree map as follows:
 
-```from stock_treemap import stock_treemap, update_sectors
+```
+from stock_treemap import stock_treemap, update_sectors
 stock_treemap('example.csv')
 ```
 

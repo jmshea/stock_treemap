@@ -6,7 +6,7 @@ stock tickers to sectors (strings).
 
 Also provided separate function to replot if sectors are updated (without having to wait
 for data to be pulled from Yahoo Finance, which can be quite slow). '''
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 import yfinance as yf
 from tqdm import tqdm

@@ -6,7 +6,7 @@ stock tickers to sectors (strings).
 
 Also provided separate function to replot if sectors are updated (without having to wait
 for data to be pulled from Yahoo Finance, which can be quite slow). '''
-__version__ = '1.3'
+__version__ = '1.5'
 
 import yfinance as yf
 from tqdm import tqdm
@@ -15,7 +15,7 @@ import pandas as pd
 import plotly.express as px
 
 
-def stock_treemap( csv_file, sectors={}, cash_balance=0 ):
+def stock_treemap( csv_file, sectors={}, cash_balance=0, interactive=True, html_file='' ):
         '''
         Pull financial data for stocks from Yahoo finance and generate a treemap
         to illustrate performance by sectors
@@ -24,6 +24,10 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0 ):
         csv_file = a CSV file with columns ticker (standard stock ticker symbol) and shares (number of shares owned)
         sectors (optional)= a dictionary that maps ticker symbols to sectors, both of which are strings
         cash_balance (optional) = amount not in stocks that will be added to give whole portfolio balance
+        interactive (optional) = whether to display the interactive graph (presumably in a Jupyter environment).
+                                 Default is True
+        html_file (optional) = if a non-empty string is provided, the rendered graph will be saved as the
+                               specified name
 
         Returns:
         df = a Pandas dataframe with the stock price, last price, market value, day's value change by stock,
@@ -35,7 +39,7 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0 ):
         Jupyter Lab plug ins. See: https://plotly.com/python/getting-started/
         '''
         df=pd.read_csv(csv_file)
-        
+
         # Set index and add the columns we will need
         df.set_index('ticker', inplace=True)
         df['price']=0
@@ -44,8 +48,7 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0 ):
         df['change (day)']=0
         df['percent change (day)']=0
         df['sector']=''
-        
-        
+
         # Now pull in the stock data from Yahoo! Finance:
         with tqdm(total=len(df)) as pbar:
             for ticker,row  in df.iterrows():
@@ -96,16 +99,19 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0 ):
                          color_continuous_midpoint=0,
                          title=my_title,
                          hover_data={'percent change (day)':':.2f'}
-
                         )
-        fig.show()
+
+        if interactive:
+            fig.show()
+        if html_file != '':
+            fig.write_html(html_file, include_plotlyjs='cdn')
 
 
         return df
 
 
 
-def update_sectors(df, sectors, cash_balance=0 ):
+def update_sectors(df, sectors, cash_balance=0, interactive=True, html_file='' ):
 
     '''
     use on dataframe created by stock_treemap to update sectors for stocks and replot the treemap.
@@ -115,6 +121,11 @@ def update_sectors(df, sectors, cash_balance=0 ):
     df = a pandas dataframe created by stock_treemap (or containing all the same columns)
     sectors = a dictionary that maps ticker symbols to sectors, both of which are strings
     cash_balance (optional) = amount not in stocks that will be added to give whole portfolio balance
+    interactive (optional) = whether to display the interactive graph (presumably in a Jupyter environment).
+                             Default is True
+    html_file (optional) = if a non-empty string is provided, the rendered graph will be saved as the
+                           specified name
+
 
     returns:
     df = a pandas dataframe with the stock price, last price, market value, day's value change by stock,
@@ -157,6 +168,9 @@ def update_sectors(df, sectors, cash_balance=0 ):
                      hover_data={'percent change (day)':':.2f'}
                     )
 
-    fig.show()
+    if interactive:
+        fig.show()
+    if html_file != '':
+        fig.write_html(html_file, include_plotlyjs='cdn')
 
     return df

@@ -19,7 +19,7 @@ stock_treemap('example.csv')
 ```
 
 A static example of the output is shown below:
-~[Example tree map created by stock_treemap()](example.png)
+![Example tree map created by stock_treemap()](example.png)
 
 Requirements
 ---

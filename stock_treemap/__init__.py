@@ -6,7 +6,7 @@ stock tickers to sectors (strings).
 
 Also provided separate function to replot if sectors are updated (without having to wait
 for data to be pulled from Yahoo Finance, which can be quite slow). '''
-__version__ = '1.0'
+__version__ = '1.1'
 
 import yfinance as yf
 from tqdm import tqdm
@@ -78,7 +78,8 @@ def stock_treemap( csv_file, sectors={} ):
                          color='percent change (day)',
                         color_continuous_scale='RdBu',
                          color_continuous_midpoint=0,
-                         title=my_title
+                         title=my_title,
+                         hover_data={'percent change (day)':':.2f'}
 
                         )
         fig.show()        
@@ -120,7 +121,8 @@ def update_sectors(df, sectors):
                      color='percent change (day)',
                     color_continuous_scale='RdBu',
                      color_continuous_midpoint=0,
-                     title=my_title
+                     title=my_title,
+                     hover_data={'percent change (day)':':.2f'}
                     )
 
     fig.show()

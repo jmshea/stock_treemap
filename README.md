@@ -10,7 +10,8 @@ column should contain the number of shares that you own. An example is shown bel
 aapl,10
 amd,10
 amzn,10
-gbtc,10```
+gbtc,10
+```
 
 If this file is called 'example.csv', then you can create a tree map as follows:
 

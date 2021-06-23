@@ -6,13 +6,75 @@ stock tickers to sectors (strings).
 
 Also provided separate function to replot if sectors are updated (without having to wait
 for data to be pulled from Yahoo Finance, which can be quite slow). '''
-__version__ = '1.5'
+__version__ = '1.6'
 
 import yfinance as yf
 from tqdm import tqdm
 import numpy as np
 import pandas as pd
 import plotly.express as px
+
+def plot_df( df, cash_balance, interactive, html_file):
+        '''Not intended to be called directly.  See stock_treemap or update_sectors() instead.
+        '''
+
+        if cash_balance > 0:
+                title_start="Porfolio value: &#36;"
+        else:
+                title_start="Stocks value: &#36;"
+
+
+        total_value=df['market value'].sum() + cash_balance
+        if total_value<100_000:
+                my_title=title_start + str(int(np.round(total_value))) + ", Today's change: &#36;" \
+                        + str(int(np.round(df['change (day)'].sum())))
+        else:
+                my_title=title_start + str(int(np.round(total_value/1000))) +'k' + ", Today's change: &#36;" \
+                        + str(int(np.round(df['change (day)'].sum())))
+
+
+
+
+        df['stock']=df.index.str.upper() + '<br>' + df['percent change (day)'].astype(str) + '%'
+        for stock in df.index:
+        #print(stock, df.loc[stock, "market value"])
+            if df.loc[stock, "market value"] >1000:
+                df.loc[stock, "stock+price"]="<b>" + stock.upper() + "</b>" \
+                + "<br>Price: $" + "{:.2f}".format(df.loc[stock, 'price']) \
+                + "<br>Value: $"+"{:.1f}".format(df.loc[stock, "market value"]/1000)+"k"
+            else:
+                df.loc[stock, "stock+price"]="<b>" + stock.upper()  + "</b>" \
+                + "<br>Price: $" + "{:.2f}".format(df.loc[stock, 'price']) \
+                + "<br>Value: $"+"{:.0f}".format(df.loc[stock, "market value"])
+
+
+
+
+        fig = px.treemap(df,
+                         path=['sector','stock'], 
+                         values='market value',
+                         color='percent change (day)',
+                         color_continuous_scale='RdYlGn',
+                         color_continuous_midpoint=0,
+                         title=my_title,
+                         custom_data=['stock+price']#,
+                         #hover_data={'percent change (day)':':.2f'}
+                        )
+
+        # Update customdata for Sectors to show percent change of sector
+        for i, data in enumerate(fig.data[0]['customdata']):
+            if data[0].find("?")>0:
+                fig.data[0]['customdata'][i][0]="{:.1f}%".format(fig.data[0]['customdata'][i][1])
+
+        fig.update_traces(hovertemplate='%{customdata[0]}')
+
+
+        if interactive:
+            fig.show()
+        if html_file != '':
+            fig.write_html(html_file, include_plotlyjs='cdn')
+
+
 
 
 def stock_treemap( csv_file, sectors={}, cash_balance=0, interactive=True, html_file='' ):
@@ -74,38 +136,7 @@ def stock_treemap( csv_file, sectors={}, cash_balance=0, interactive=True, html_
 
         df['percent change (day)'] = np.round((df['price']-df['previous close'])/df['previous close']*100,2)
 
-        if cash_balance > 0:
-                title_start="Porfolio value: &#36;"
-        else:
-                title_start="Stocks value: &#36;"
-
-
-        total_value=df['market value'].sum() + cash_balance
-        if total_value<100_000:
-                my_title=title_start + str(int(np.round(total_value))) + ", Today's change: &#36;" \
-                        + str(int(np.round(df['change (day)'].sum())))
-        else:
-                my_title=title_start + str(int(np.round(total_value/1000))) +'k' + ", Today's change: &#36;" \
-                        + str(int(np.round(df['change (day)'].sum())))
-
-
-
-
-        fig = px.treemap(df, 
-                         path=['sector',df.index], 
-                         values='market value',
-                         color='percent change (day)',
-                        color_continuous_scale='RdYlGn',
-                         color_continuous_midpoint=0,
-                         title=my_title,
-                         hover_data={'percent change (day)':':.2f'}
-                        )
-
-        if interactive:
-            fig.show()
-        if html_file != '':
-            fig.write_html(html_file, include_plotlyjs='cdn')
-
+        plot_df( df, cash_balance, interactive, html_file)
 
         return df
 
@@ -142,35 +173,7 @@ def update_sectors(df, sectors, cash_balance=0, interactive=True, html_file='' )
         if ticker in sectors:
             df.loc[ticker, 'sector']=sectors[ticker]
 
-    if cash_balance > 0:
-        title_start="Porfolio value: &#36;"
-    else:
-        title_start="Stocks value: &#36;"
 
-
-    total_value=df['market value'].sum() + cash_balance
-    if total_value<100_000:
-        my_title=title_start + str(int(np.round(total_value))) + ", Today's change: &#36;" \
-                + str(int(np.round(df['change (day)'].sum())))
-    else:
-        my_title=title_start + str(int(np.round(total_value/1000))) +'k' + ", Today's change: &#36;" \
-                + str(int(np.round(df['change (day)'].sum())))
-
-
-
-    fig = px.treemap(df, 
-                     path=['sector',df.index], 
-                     values='market value',
-                     color='percent change (day)',
-                    color_continuous_scale='RdYlGn',
-                     color_continuous_midpoint=0,
-                     title=my_title,
-                     hover_data={'percent change (day)':':.2f'}
-                    )
-
-    if interactive:
-        fig.show()
-    if html_file != '':
-        fig.write_html(html_file, include_plotlyjs='cdn')
+    plot_df( df, cash_balance, interactive, html_file)
 
     return df

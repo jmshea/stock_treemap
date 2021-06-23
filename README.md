@@ -27,7 +27,7 @@ from stock_treemap import stock_treemap, update_sectors
 stock_treemap('example.csv')
 ```
 
-A static example of the output is shown below:
+An animated GIF showing an example of the output is below:
 ![Example tree map created by stock_treemap()](https://raw.githubusercontent.com/jmshea/stock_treemap/main/example.gif)
 
 For more advanced options, see the function help (although it is still in progress with recent updates

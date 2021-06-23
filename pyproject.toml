@@ -4,10 +4,10 @@ build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
 module = "stock_treemap"
-authors = ["John M. Shea <jshea@ieee.org>"]
-homepage = "https://github.com/jmshea/stock_treemap"
-repository = "https://github.com/jmshea/stock_treemap"
+author = "John M. Shea"
+author-email = "jshea@ieee.org"
+home-page = "https://github.com/jmshea/stock_treemap"
 classifiers = [ "License :: OSI Approved :: MIT License",]
 description-file = "README.md"
-keywords = [ "stock", "treemap", "portfolio", "visualization", "investment"]
+keywords = "stock, treemap, portfolio, visualization, investment"
 

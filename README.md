@@ -1,4 +1,4 @@
-# stock_treemap 
+﻿# stock_treemap 
 Want to make a cool stock diagram, like those on finviz: https://finviz.com/map.ashx , but
 for your own portfolio? 
 
@@ -13,9 +13,11 @@ column should contain the number of shares that you own. An example is shown bel
 ```
 ticker,shares
 aapl,20
-amd,20
+amd,10
 amzn,2
-gbtc,40
+googl,1
+ethe,30
+gbtc,4
 ```
 
 If this file is called 'example.csv', then you can create a tree map as follows:
@@ -26,7 +28,7 @@ stock_treemap('example.csv')
 ```
 
 A static example of the output is shown below:
-![Example tree map created by stock_treemap()](https://raw.githubusercontent.com/jmshea/stock_treemap/main/example.png)
+![Example tree map created by stock_treemap()](https://raw.githubusercontent.com/jmshea/stock_treemap/main/example.gif)
 
 For more advanced options, see the function help (although it is still in progress with recent updates
 to provide saving to HTML.)
